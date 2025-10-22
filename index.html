@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HimBuddy Project</title>
+<style>
+    /* Reset */
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg,#f0f4f8,#d9e2ec);
+        color: #333;
+        line-height:1.6;
+    }
+
+    header {
+        text-align:center;
+        padding:60px 20px 80px;
+        background: #1e88e5;
+        color: #fff;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+
+    header h1 { font-size:2.8rem; margin-bottom:10px; }
+    header p { font-size:1.1rem; color: #e0f2f1; }
+    header small { display:block; margin-top:10px; font-size:0.9rem; color:#cce5ff; }
+
+    main {
+        max-width:900px;
+        margin: -40px auto 40px;
+        padding:0 20px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius:12px;
+        padding:40px 30px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom:30px;
+        text-align:center;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover { transform: translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.15); }
+
+    h2 { font-size:2rem; margin-bottom:20px; color:#1e88e5; }
+    p { font-size:1rem; margin-bottom:20px; }
+
+    .buttons {
+        display:flex;
+        justify-content:center;
+        gap:20px;
+        flex-wrap:wrap;
+    }
+
+    .btn {
+        background: linear-gradient(135deg,#43cea2,#185a9d);
+        color:white;
+        text-decoration:none;
+        padding:15px 35px;
+        border-radius:50px;
+        font-weight:bold;
+        font-size:1rem;
+        transition:0.3s;
+        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover { transform: translateY(-3px); box-shadow:0 10px 25px rgba(0,0,0,0.2); }
+
+    .about {
+        text-align:left;
+        font-size:1rem;
+        line-height:1.8;
+        color:#444;
+    }
+
+    footer {
+        text-align:center;
+        padding:20px;
+        background:#1e88e5;
+        color:#fff;
+        border-top-left-radius:12px;
+        border-top-right-radius:12px;
+        margin-top:40px;
+    }
+
+    footer p:last-child {
+        font-size:0.9rem;
+        color:#e0f2f1;
+        margin-top:5px;
+    }
+
+    /* Responsive */
+    @media(max-width:600px){
+        header h1 { font-size:2rem; }
+        h2 { font-size:1.5rem; }
+        .btn { padding:12px 25px; font-size:0.95rem; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>HimBuddy ESP32 Project</h1>
+    <p>Environmental monitoring & alert system with ESP32 & Android app</p>
+    <small>Developed by Akshit Negi</small>
+</header>
+
+<main>
+    <div class="card download-section">
+        <h2>Download</h2>
+        <p>Click below to download the APK or ESP32 code:</p>
+        <div class="buttons">
+            <a href="https://drive.google.com/file/d/1MYZ-GyUlVHWVjbD7uGGAE_YxHU5EXr1Y/view?usp=sharing" target="_blank" class="btn">Download APK</a>
+            <a href="https://drive.google.com/file/d/14JDWEYb4yZjwxZbjLSIzskp3XAPXb0XS/view?usp=sharing" target="_blank" class="btn">Download ESP32 Code</a>
+        </div>
+        <p style="margin-top:15px; font-size:0.9rem; color:#666;">Latest Version: 1.0.0</p>
+    </div>
+
+    <div class="card about">
+        <h2>About HimBuddy</h2>
+        <p>HimBuddy is an advanced environmental monitoring system using ESP32. It detects fire, landslides, and vibrations (earthquakes) using sensors and communicates alerts via Bluetooth and Firebase to the Android application. It also logs events to SD card and can trigger emergency notifications. The Android app and ESP32 code can be downloaded using the buttons above.</p>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 HimBuddy Project</p>
+    <p>Developed by Akshit Negi</p>
+</footer>
+
+<script>
+    console.log("HimBuddy professional website loaded.");
+</script>
+
+</body>
+</html>
