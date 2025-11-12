@@ -1,0 +1,120 @@
+
+
+OLED SSD1306
+
+VCC → 3.3V
+
+GND → GND
+
+SDA → GPIO21
+
+SCL → GPIO22
+
+BME280 (I2C)
+
+VCC → 3.3V
+
+GND → GND
+
+SDA → GPIO21
+
+SCL → GPIO22
+
+MPU6050 (I2C)
+
+VCC → 3.3V
+
+GND → GND
+
+SDA → GPIO21
+
+SCL → GPIO22
+
+AD0 → 3.3V (to avoid address conflict)
+
+DS3231 (RTC, I2C)
+
+VCC → 3.3V
+
+GND → GND
+
+SDA → GPIO21
+
+SCL → GPIO22
+
+DHT22 (AM2302)
+
+VCC → 3.3V
+
+GND → GND
+
+DATA → GPIO15 (use 4.7k–10k pull-up to 3.3V if module bare)
+
+MQ-2 (analog)
+
+VCC → 5V (if module needs) or 3.3V (prefer)
+
+GND → GND
+
+A0 → GPIO34 via voltage divider if VCC=5V
+
+Soil Moisture (analog)
+
+VCC → 3.3V (prefer) or 5V
+
+GND → GND
+
+A0 → GPIO35 via divider if VCC=5V
+
+Tilt / Vibration switch
+
+VCC → 3.3V (if 3-wire)
+
+GND → GND
+
+OUT → GPIO14 (INPUT_PULLUP; LOW = triggered)
+
+Buzzer (use transistor)
+
+Buzzer + → 5V (or module V+)
+
+Buzzer − → Collector of NPN
+
+Emitter → GND
+
+Base → GPIO27 via 1kΩ resistor
+
+MicroSD (SPI)
+
+VCC → 3.3V
+
+GND → GND
+
+CS → GPIO5
+
+MOSI → GPIO23
+
+MISO → GPIO19
+
+SCK → GPIO18
+
+Neo-6M GPS
+
+VCC → 3.3V
+
+GND → GND
+
+TX (GPS → MCU) → GPIO16
+
+RX (GPS ← MCU) → GPIO17
+
+SIM800L (UART) — POWER FROM EXTERNAL 4V
+
+VCC → External 4.0V supply (≥1A)
+
+GND → GND (common)
+
+TX (SIM → MCU) → GPIO26
+
+RX (SIM ← MCU) → GPIO25
+(use level shifter if needed)
