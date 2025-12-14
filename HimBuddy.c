@@ -5,6 +5,7 @@
  * BOARD: ESP32 DOIT DEVKIT V1
  *
  * UPDATED FEATURES: 
+ * - Full Red Blinking Website on Alert
  * - Web Text Messaging to OLED
  * - Magic "alert" command
  * - Google Maps Intent Link
@@ -126,7 +127,7 @@ bool checkSafetyPriority() {
   // ---------------- CHECK 1: FLOOD ----------------
   int soil = analogRead(SOIL_PIN);
   if (soil < FLOOD_LIMIT && soil > 10) { 
-    currentAlert = "FLOOD DETECTED!"; // No Pictures
+    currentAlert = "FLOOD DETECTED!"; 
     
     // OLED Alert
     display.clearDisplay(); 
@@ -147,7 +148,7 @@ bool checkSafetyPriority() {
   // ---------------- CHECK 2: FIRE ----------------
   int gas = analogRead(MQ2_PIN);
   if (gas > GAS_LIMIT) { 
-    currentAlert = "FIRE ALERT!"; // No Pictures
+    currentAlert = "FIRE ALERT!"; 
     
     // OLED Alert
     display.clearDisplay(); 
@@ -175,7 +176,7 @@ bool checkSafetyPriority() {
   lastY = a.acceleration.y;
 
   if (dx > QUAKE_LIMIT || dy > QUAKE_LIMIT) { 
-    currentAlert = "EARTHQUAKE!"; // No Pictures
+    currentAlert = "EARTHQUAKE!"; 
     
     // OLED Alert with WARNING SIGN
     display.clearDisplay(); 
@@ -208,62 +209,74 @@ bool checkSafetyPriority() {
 void handleRoot() {
   String html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'>";
   
-  // Auto Refresh page every 5 second (Thoda slow kiya taaki type kar sako)
-  // html += "<meta http-equiv='refresh' content='5'>";
+  // Auto Refresh for Realtime Alerts
+  // HTML refresh se page reload hoga taaki alert dikhe
+  html += "<meta http-equiv='refresh' content='2'>"; 
   
-  // --- JAVASCRIPT FOR NOTIFICATIONS ---
+  // --- JAVASCRIPT FOR NOTIFICATIONS & VIBRATION ---
   html += "<script>";
   html += "function reqPerm() { Notification.requestPermission(); }";
   
   if (currentAlert != "") {
+     // Browser Notification
      html += "if(Notification.permission === 'granted') {";
-     html += "  new Notification('HIMBUDDY ALERT', { body: '" + currentAlert + "', vibrate: [200, 100, 200] });";
+     html += "  new Notification('HIMBUDDY DANGER!', { body: '" + currentAlert + "' });";
      html += "}";
+     // Phone Vibration (200ms vibrate, 100ms stop, 200ms vibrate)
+     html += "if (navigator.vibrate) { navigator.vibrate([500, 200, 500]); }";
   }
   html += "</script>";
 
   // --- CSS STYLING ---
   html += "<style>";
-  html += "body { font-family: sans-serif; text-align: center; background: #222; color: white; }";
+  html += "body { font-family: sans-serif; text-align: center; background: #222; color: white; margin: 0; padding: 10px; }";
   
+  // --- DANGER BLINKING LOGIC ---
   if (currentAlert != "") {
-    html += "body { background-color: red !important; }"; 
-    html += ".alert { background: darkred; border: 5px solid yellow; padding: 20px; animation: blink 0.5s infinite; }";
-    html += "@keyframes blink { 0% {opacity:1} 50% {opacity:0.5} 100% {opacity:1} }";
+    // Agar Alert hai to RED BLINK karega
+    html += "body { animation: blinkRed 0.5s infinite; }";
+    html += "@keyframes blinkRed { 0% {background-color: red;} 50% {background-color: black;} 100% {background-color: red;} }";
+    html += ".alert-box { border: 5px solid yellow; background: darkred; padding: 20px; border-radius: 10px; }";
+    html += "h1 { font-size: 40px; }";
   }
 
-  html += "button { width: 80%; padding: 15px; margin: 8px; font-size: 18px; border-radius: 10px; border: none; cursor: pointer; }";
+  html += "button { width: 90%; padding: 15px; margin: 8px; font-size: 18px; border-radius: 10px; border: none; cursor: pointer; }";
   html += ".nav { background: #007bff; color: white; }"; 
   html += ".act { background: #28a745; color: white; }"; 
   html += ".ext { background: #dc3545; color: white; }"; 
   html += ".info { background: #ffc107; color: black; }";
-  html += ".purple { background: #8e44ad; color: white; }"; // GPS color
-  html += ".orange { background: #e67e22; color: white; }"; // Buzzer color
+  html += ".purple { background: #8e44ad; color: white; }"; 
+  html += ".orange { background: #e67e22; color: white; }"; 
   
-  // Form CSS
-  html += "input[type=text] { width: 60%; padding: 10px; border-radius: 5px; }";
-  html += "input[type=submit] { width: 30%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; }";
+  // Input Box Styling
+  html += "input[type=text] { width: 65%; padding: 12px; border-radius: 5px; border: none; margin-bottom: 10px; }";
+  html += "input[type=submit] { width: 25%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 5px; font-weight: bold; }";
+  
   html += "</style></head><body>";
 
   // --- HTML BODY ---
   if (currentAlert != "") {
-    html += "<div class='alert'><h1>DANGER</h1><h2>" + currentAlert + "</h2></div>";
+    // DANGER MODE
+    html += "<div class='alert-box'>";
+    html += "<h1>⚠️ DANGER ⚠️</h1>";
+    html += "<h2>" + currentAlert + "</h2>";
+    html += "<h3>GET TO SAFETY!</h3>";
+    html += "</div><br>";
   }
 
   html += "<h1>HIMBUDDY CONTROL</h1>";
   html += "<h3>Mode: " + (inMenu ? "MENU" : menuItems[menuIndex]) + "</h3>";
   
-  // --- NEW FEATURE: TEXT BOX ---
-  html += "<div style='background:#333; padding:15px; margin:10px; border-radius:10px;'>";
+  // --- TEXT BOX FEATURE ---
+  html += "<div style='background:#333; padding:15px; border-radius:10px;'>";
   html += "<form action='/msg' method='GET'>";
-  html += "<p><b>SEND MESSAGE TO SCREEN:</b></p>";
-  html += "<input type='text' name='t' placeholder='Type here...'> ";
+  html += "<label><b>SEND TO OLED:</b></label><br>";
+  html += "<input type='text' name='t' placeholder='Type Msg (or alert)'> ";
   html += "<input type='submit' value='SEND'>";
-  html += "<p><small>Type <b>alert</b> to trigger alarm</small></p>";
   html += "</form></div>";
 
   // Notification Button
-  html += "<button onclick='reqPerm()' style='background:#6610f2;color:white;'>ENABLE NOTIFICATIONS</button>";
+  html += "<br><button onclick='reqPerm()' style='background:#6610f2;color:white;'>🔔 ALLOW ALERTS</button>";
   
   html += "<hr>";
   
@@ -275,7 +288,7 @@ void handleRoot() {
   
   html += "<hr>";
   
-  // --- NEW FEATURES: MAPS & BUZZER ---
+  // --- MAPS & BUZZER ---
   
   // Logic to create Google Maps Link
   String mapLink = "https://www.google.com/maps/search/?api=1&query=";
@@ -287,8 +300,8 @@ void handleRoot() {
      mapLink += "31.4982,77.8054";
   }
   
-  html += "<a href='" + mapLink + "' target='_blank'><button class='purple'>OPEN MAPS (GPS)</button></a>";
-  html += "<a href='/test_buzz'><button class='orange'>TEST ALARM (3s)</button></a>";
+  html += "<a href='" + mapLink + "' target='_blank'><button class='purple'>📍 OPEN MAPS (GPS)</button></a>";
+  html += "<a href='/test_buzz'><button class='orange'>🔊 TEST ALARM</button></a>";
 
   html += "<hr>";
   
